@@ -9,45 +9,21 @@ namespace PotterShoppingCart
     {
         public double GetBuyPrice(List<ShoppingProduct> shoppingProducts)
         {
-            int distinct = shoppingProducts.Select(s => s.BuyProduct.Id).Distinct().Count();
+            CalculateDiscount calculateDiscount = GroupDiscountSeries(shoppingProducts);
+            return calculateDiscount.GetPrice();
+        }
 
-            int discountCount = 0;
-            
-            if (distinct < 2)
+
+        private CalculateDiscount GroupDiscountSeries(List<ShoppingProduct> shoppingProducts)
+        {
+            CalculateDiscount collection = new CalculateDiscount();
+
+            foreach (var shoppingProduct in shoppingProducts)
             {
-                discountCount = 0;
-            }
-            else if (distinct > 5)
-            {
-                discountCount = 5;
-            }
-            else
-            {
-                discountCount = distinct;
+                collection.TryAdd(shoppingProduct);
             }
 
-            double discountPrice = 0;
-
-            if (discountCount == 2)
-            {
-                discountPrice = discountCount * 100 * 0.95;                
-            }
-            else if (discountCount == 3)
-            {
-                discountPrice = discountCount * 100 * 0.9;
-            }
-            else if (discountCount == 4)
-            {
-                discountPrice = discountCount * 100 * 0.8;
-            }
-            else if (discountCount == 5)
-            {
-                discountPrice = discountCount * 100 * 0.75;
-            }
-
-            int originalCount = shoppingProducts.Count - discountCount;
-
-            return (originalCount * 100) + (discountPrice);
+            return collection;
         }
     }
 
@@ -55,6 +31,71 @@ namespace PotterShoppingCart
     {
         public Product BuyProduct { get; set; }
         public int Price { get; set; }
+    }
+
+    public class CalculateDiscount
+    {
+        private List<DiscountProduct> _groupDiscounts;
+
+        public void TryAdd(ShoppingProduct product)
+        {
+            if(null == _groupDiscounts)
+                _groupDiscounts = new List<DiscountProduct>();
+
+            if(false == _groupDiscounts.Any(s => s.TryAdd(product.BuyProduct.Id)))
+            {
+                _groupDiscounts.Add(new DiscountProduct());
+                TryAdd(product);
+            }
+        }
+
+        public double GetPrice()
+        {
+            double sum = 0;
+
+            foreach (var discount in _groupDiscounts)
+            {
+                switch (discount.Ids.Count)
+                {
+                    case 1:
+                        sum += discount.Ids.Count * 100;
+                        break;
+                    case 2:
+                        sum += discount.Ids.Count * 100 * 0.95;
+                        break;
+                    case 3:
+                        sum += discount.Ids.Count * 100 * 0.9;
+                        break;
+                    case 4:
+                        sum += discount.Ids.Count * 100 * 0.8;
+                        break;
+                    default:
+                        sum += discount.Ids.Count * 100 * 0.75;
+                        break;
+                }
+            }
+
+            return sum;
+        }
+    }
+
+    public class DiscountProduct
+    {
+        public List<int> Ids { get; set; }
+
+        public bool TryAdd(int id)
+        {
+            if(Ids == null)
+                Ids = new List<int>();
+
+            if (false == Ids.Contains(id))
+            {
+                Ids.Add(id);
+                return true;
+            }
+
+            return false;
+        }
     }
 
     public class Product

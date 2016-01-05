@@ -189,5 +189,46 @@ namespace PotterShoppingCart.Tests
 
             Assert.AreEqual(expected, actual);
         }
+
+        [TestMethod]
+        public void GetBuyPrice_first_episode_1_and_second_episode_2_and_third_episode_2_should_be_460()
+        {
+            double expected = 460;
+
+            List<ShoppingProduct> shoppingProducts = new List<ShoppingProduct>
+            {
+                new ShoppingProduct
+                {
+                    BuyProduct = new Product{Id = 1, ProductName = "harry potter episode 1"},
+                    Price = 100
+                },
+                new ShoppingProduct
+                {
+                    BuyProduct = new Product{Id = 2, ProductName = "harry potter episode 2"},
+                    Price = 100
+                },
+                new ShoppingProduct
+                {
+                    BuyProduct = new Product{Id = 2, ProductName = "harry potter episode 2"},
+                    Price = 100
+                },
+                new ShoppingProduct
+                {
+                    BuyProduct = new Product{Id = 3, ProductName = "harry potter episode 3"},
+                    Price = 100
+                },
+                new ShoppingProduct
+                {
+                    BuyProduct = new Product{Id = 3, ProductName = "harry potter episode 3"},
+                    Price = 100
+                }
+            };
+
+
+            ShoppingCartManager manager = new ShoppingCartManager();
+            double actual = manager.GetBuyPrice(shoppingProducts);
+
+            Assert.AreEqual(expected, actual);
+        }
     }
 }
