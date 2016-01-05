@@ -9,14 +9,21 @@ namespace PotterShoppingCart
     {
         public int GetBuyPrice(List<ShoppingProduct> shoppingProducts)
         {
-            if (shoppingProducts.Count > 1)
-            {
-                return 190;
-            }
-            else
+            if (shoppingProducts.Count == 1)
             {
                 return shoppingProducts.Sum(s => s.Price);
             }
+            if (shoppingProducts.Count == 2)
+            {
+                return 190;
+            }
+
+            if (shoppingProducts.Count == 3)
+            {
+                return 270;
+            }
+
+            return 0;
         }
     }
 
