@@ -26,6 +26,10 @@ namespace PotterShoppingCart
             {
                 return 320;
             }
+            if (shoppingProducts.Count == 5)
+            {
+                return 375;
+            }
 
             return 0;
         }
