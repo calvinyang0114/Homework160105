@@ -230,5 +230,17 @@ namespace PotterShoppingCart.Tests
 
             Assert.AreEqual(expected, actual);
         }
+
+
+        [TestMethod]
+        public void GetBuyPrice_not_buy_any_should_be_0()
+        {
+            double expected = 0;
+
+            ShoppingCartManager manager = new ShoppingCartManager();
+            double actual = manager.GetBuyPrice(null);
+
+            Assert.AreEqual(expected, actual);
+        }
     }
 }

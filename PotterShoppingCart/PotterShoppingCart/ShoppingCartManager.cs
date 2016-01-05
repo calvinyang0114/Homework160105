@@ -9,6 +9,9 @@ namespace PotterShoppingCart
     {
         public double GetBuyPrice(List<ShoppingProduct> shoppingProducts)
         {
+            if (null == shoppingProducts || false == shoppingProducts.Any())
+                return 0;
+
             CalculateDiscount calculateDiscount = GroupDiscountSeries(shoppingProducts);
             return calculateDiscount.GetPrice();
         }
