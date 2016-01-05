@@ -83,9 +83,9 @@ namespace PotterShoppingCart.Tests
         }
 
         [TestMethod]
-        public void GetBuyPrice_first_episode_one_and_second_episode_one_and_third_episode_one_and_fourth_episode_one_should_be_360()
+        public void GetBuyPrice_first_episode_one_and_second_episode_one_and_third_episode_one_and_fourth_episode_one_should_be_320()
         {
-            int expected = 360;
+            int expected = 320;
             List<ShoppingProduct> shoppingProducts = new List<ShoppingProduct>
             {
                 new ShoppingProduct
