@@ -7,31 +7,47 @@ namespace PotterShoppingCart
 {
     public class ShoppingCartManager
     {
-        public int GetBuyPrice(List<ShoppingProduct> shoppingProducts)
+        public double GetBuyPrice(List<ShoppingProduct> shoppingProducts)
         {
-            if (shoppingProducts.Count == 1)
+            int distinct = shoppingProducts.Select(s => s.BuyProduct.Id).Distinct().Count();
+
+            int discountCount = 0;
+            
+            if (distinct < 2)
             {
-                return shoppingProducts.Sum(s => s.Price);
+                discountCount = 0;
             }
-            if (shoppingProducts.Count == 2)
+            else if (distinct > 5)
             {
-                return 190;
+                discountCount = 5;
+            }
+            else
+            {
+                discountCount = distinct;
             }
 
-            if (shoppingProducts.Count == 3)
+            double discountPrice = 0;
+
+            if (discountCount == 2)
             {
-                return 270;
+                discountPrice = discountCount * 100 * 0.95;                
             }
-            if (shoppingProducts.Count == 4)
+            else if (discountCount == 3)
             {
-                return 320;
+                discountPrice = discountCount * 100 * 0.9;
             }
-            if (shoppingProducts.Count == 5)
+            else if (discountCount == 4)
             {
-                return 375;
+                discountPrice = discountCount * 100 * 0.8;
+            }
+            else if (discountCount == 5)
+            {
+                discountPrice = discountCount * 100 * 0.75;
             }
 
-            return 0;
+            int originalCount = shoppingProducts.Count - discountCount;
+
+            return (originalCount * 100) + (discountPrice);
         }
     }
 
